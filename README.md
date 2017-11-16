@@ -83,3 +83,4 @@ height  | number  | undefined | required; original height of the gallery image (
 alt  | string  | undefined | optional; alt text of the gallery image
 ImageComponent | function | default component | optional; use a different image component than the default provided
 
+# black-friday-awards
