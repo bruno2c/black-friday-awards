@@ -3,9 +3,7 @@ import ReactDOM from 'react-dom';
 import jsonp from 'jsonp';
 import Measure from 'react-measure';
 import ExampleBasic from './ExampleBasic';
-import ExampleWithLightbox from './ExampleWithLightbox';
-import ExampleCustomComponentSelection from './ExampleCustomComponentSelection';
-import ExampleDynamicLoading from './ExampleDynamicLoading';
+import AwardGallery from './AwardGallery';
 
 class App extends React.Component {
   constructor() {
@@ -78,10 +76,7 @@ class App extends React.Component {
 						  columns = 4;
 					  }
             return <div ref={measureRef} className="App">
-                <ExampleBasic columns={columns} photos={this.state.photos.slice(0,6)} />
-                <ExampleWithLightbox columns={columns} photos={this.state.photos.slice(6,12)} />
-                <ExampleCustomComponentSelection columns={columns} photos={this.state.photos.slice(12,18)} />
-                <ExampleDynamicLoading columns={columns} photos={this.state.photos} />
+                <AwardGallery columns={columns} photos={this.state.photos} />
               </div>
           }
         }
