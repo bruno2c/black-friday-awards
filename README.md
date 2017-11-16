@@ -1,5 +1,5 @@
 # Black Friday Awards
 
-Simple awards application to a contest.
+A simple contest awards application.
 
-It uses [https://github.com/neptunian/react-photo-gallery](neptunian/react-photo-gallery) to display the gallery and select photos to vote.
+It uses [neptunian/react-photo-gallery](https://github.com/neptunian/react-photo-gallery) to display the gallery and select photos to vote.
