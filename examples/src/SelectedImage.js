@@ -4,11 +4,11 @@ import ContentUnSelect from 'material-ui/svg-icons/toggle/check-box-outline-blan
 import ContentSelect from 'material-ui/svg-icons/toggle/check-box';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
-const imgStyle = { 
-  display: 'block', 
-  transition: 'transform .135s cubic-bezier(0.0,0.0,0.2,1),opacity linear .15s' 
+const imgStyle = {
+  display: 'block',
+  transition: 'transform .135s cubic-bezier(0.0,0.0,0.2,1),opacity linear .15s'
 };
-const selectedImgStyle = { 
+const selectedImgStyle = {
   transform: 'translateZ(0px) scale3d(0.9, 0.9, 1)',
   transition: 'transform .135s cubic-bezier(0.0,0.0,0.2,1),opacity linear .15s'
 };
@@ -36,10 +36,10 @@ const SelectedImage = ({ index, onClick, photo, margin, selectClick}) => {
       {`.cont.selected:hover{outline:2px solid #06befa}`}
       </style>
             { photo.selected ?
-                <FloatingActionButton style={{  position: 'absolute', top: '84%',  left:'89%' }} onClick={(e) => selectClick(e, {index, photo})}>
+                <FloatingActionButton style={{  position: 'absolute', top: '78%',  left:'86%' }} onClick={(e) => selectClick(e, {index, photo})}>
                 <ContentSelect/>
                 </FloatingActionButton>:
-                <FloatingActionButton secondary={true} style={{  position: 'absolute', top: '84%',  left:'89%' }} onClick={(e) => selectClick(e, {index, photo})}>
+                <FloatingActionButton secondary={true} style={{  position: 'absolute', top: '78%',  left:'86%' }} onClick={(e) => selectClick(e, {index, photo})}>
                 <ContentUnSelect />
                 </FloatingActionButton>
             }
