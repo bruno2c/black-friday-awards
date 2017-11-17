@@ -15,6 +15,7 @@
     "url": "https://github.com/neptunian/react-photo-gallery/issues"
   },
   "dependencies": {
+    "material-ui": "^0.19.4",
     "prop-types": "~15.6.0"
   },
   "devDependencies": {

@@ -23,10 +23,9 @@ return function() {
 class AwardGallery extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { photos: this.props.photos.slice(0,9), selectAll: false, pageNum:1, totalPages:3, loadedAll: false };
+    this.state = { photos: this.props.photos.slice(0,9), selectAll: false, pageNum:1, totalPages:3, loadedAll: false};
     this.selectPhoto = this.selectPhoto.bind(this);
-    this.toggleSelect = this.toggleSelect.bind(this);
-
+    this.toggleSelect = this.toggleSelect.bind(this)
     this.handleScroll = this.handleScroll.bind(this);
     this.loadMorePhotos = this.loadMorePhotos.bind(this);
     this.loadMorePhotos = debounce(this.loadMorePhotos, 200);
@@ -59,13 +58,12 @@ class AwardGallery extends React.Component {
       pageNum: this.state.pageNum + 1
     });
   }
+
   render(){
     return (
       <div>
-        <h2>Using the ImageComponent prop</h2>
-        <h3>Pass in a custom image component to create any visual representation such as selection</h3>
-        <p><button className="toggle-select" onClick={this.toggleSelect}>toggle select all</button></p>
         <Gallery photos={this.state.photos} columns={this.props.columns} onClick={this.selectPhoto} ImageComponent={SelectedImage}/>
+
         {!this.state.loadedAll && <div className="loading-msg" id="msg-loading-more">Loading</div>}
       </div>
     );
