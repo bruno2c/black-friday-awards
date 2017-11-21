@@ -4,6 +4,8 @@ namespace Models;
 
 class ParticipantVote extends AbstractModel
 {
+    public $table = 'participant_vote';
+
     public function getParticipantVotes($participantId)
     {
         $sql = "SELECT pv.* FROM participant_vote pv WHERE pv.participant_id = ?";

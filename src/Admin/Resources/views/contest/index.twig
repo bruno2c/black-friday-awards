@@ -1,0 +1,52 @@
+{% extends "admin_base.twig" %}
+
+{% block content %}
+
+    <div class="row">
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Concursos</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Máximo de votos</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for contest in contests %}
+                                <tr>
+                                    <th scope="row">{{ contest.id }}</th>
+                                    <td>{{ contest.name }}</td>
+                                    <td>{{ contest.max_votes }}</td>
+                                    <td>{{ contest.status }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{{ asset('/js/admin/dataTable.js') }}"></script>
+    <script src="{{ asset('/js/admin-theme/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('/js/admin-theme/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('/js/admin-theme/datatables/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('/js/admin-theme/datatables/buttons.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('/js/admin-theme/datatables/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('/js/admin-theme/datatables/buttons.print.min.js') }}"></script>
+
+{% endblock %}

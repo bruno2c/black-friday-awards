@@ -40,7 +40,7 @@ class Version20171120233527 extends AbstractMigration
             `id` INT NOT NULL AUTO_INCREMENT,
             `path` VARCHAR(600) NOT NULL,
             `contest_id` INT NOT NULL,
-            `owner_id` INT NOT NULL,
+            `owner_id` INT,
             PRIMARY KEY (`id`),
             INDEX `fk_image_owner_idx` (`owner_id` ASC),
             CONSTRAINT `fk_image_participant`
@@ -48,6 +48,10 @@ class Version20171120233527 extends AbstractMigration
             REFERENCES `participant` (`id`)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION)
+        ");
+
+        $this->addSql("ALTER TABLE `image` 
+            ADD COLUMN `url` VARCHAR(600) NULL AFTER `owner_id`;
         ");
 
         $this->addSql("ALTER TABLE `image` 
