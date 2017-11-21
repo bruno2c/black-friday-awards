@@ -29,6 +29,22 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
     'assets.version_format' => '%s?version=%s'
 ));
 
+$app->register(new Silex\Provider\SessionServiceProvider());
+
+$app->register(new Silex\Provider\SecurityServiceProvider(), array(
+    'security.firewalls' => [
+        'admin' => array(
+            'pattern' => '^/admin/',
+            'http' => true,
+            'form' => array('login_path' => '/admin_login', 'check_path' => '/admin/login_check'),
+            'users' => array(
+                // raw password is foo
+                'rocket' => array('ROLE_ADMIN', '$2y$10$dIiI3/WZRWcfY/f.z/XKI.w9j3o0zLbZQjvJOZ58ATj/oDMEEEooi'),
+            ),
+        ),
+    ]
+));
+
 $app['config.filesystem'] = $filesystem;
 
 $app->run();
