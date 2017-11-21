@@ -8,7 +8,7 @@ module.exports = {
   },
   output: {
     filename: 'app.js',
-    publicPath: '/web',
+    publicPath: '/',
   },
   devServer: {
     contentBase: path.resolve(__dirname, 'web/js/gallery/examples/src'),

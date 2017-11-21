@@ -38,7 +38,8 @@ class AwardGallery extends React.Component {
             totalPages: 3,
             loadedAll: false,
             openDialog: false,
-            loginCpf: false
+            loginCpf: false,
+            error: ''
         };
         this.selectPhoto = this.selectPhoto.bind(this);
         this.toggleSelect = this.toggleSelect.bind(this)
@@ -103,11 +104,16 @@ class AwardGallery extends React.Component {
     };
 
     handleLogin= () => {
+        if (this.state.loginCpf == false) {
+            this.setState({error: 'O campo CPF é obrigatório'});
+            return;
+        }
         // this.autenticate(this.state.loginCpf);
         this.setState({openDialog: false});
     };
 
     handleClose = () => {
+        this.setState({error: ''});
         this.setState({openDialog: false});
     };
 
@@ -160,6 +166,7 @@ class AwardGallery extends React.Component {
                     <TextField
                         floatingLabelText="CPF"
                         onChange={this.handleChange}
+                        errorText={this.state.error}
                     >
                         <InputMask mask="999.999.999-99" maskChar=" " />
                     </TextField>
