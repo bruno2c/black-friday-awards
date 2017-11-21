@@ -28,7 +28,7 @@
                                 <td>{{ image.contest_name }}</td>
                                 <td>{{ image.participant_name }}</td>
                                 <td>{{ image.path }}</td>
-                                <td>{{ image.url }}</td>
+                                <td><a href="{{ image.url }}" target="_blank">{{ image.url }}</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>

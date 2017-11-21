@@ -21,7 +21,7 @@ class Image extends AbstractModel
     public function findAllWithRelatedData()
     {
         $sql = "SELECT i.*, c.name contest_name, p.name participant_name FROM image i
-                JOIN participant p ON p.id = i.owner_id
+                LEFT JOIN participant p ON p.id = i.owner_id
                 JOIN contest c ON c.id = i.contest_id";
 
         return $this->db->fetchAll($sql);
