@@ -31,3 +31,7 @@ example/dist
 
 #gitbook
 _book
+
+/vendor/
+/app/db.php
+/node_modules/
