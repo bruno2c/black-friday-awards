@@ -32,7 +32,8 @@ class Image extends AbstractModel
         return $this->db->insert('image', [
             'contest_id' => (int) $contestId,
             'path' => $path,
-            'url' => $url
+            'url' => $url,
+            'created_at' => (new \DateTime())->format('Y-m-d H:i:s')
         ]);
     }
 }

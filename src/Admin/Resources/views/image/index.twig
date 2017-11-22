@@ -8,6 +8,7 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2>Imagens</h2>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-md">Importar</button>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
@@ -37,13 +38,73 @@
             </div>
         </div>
 
+        <div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel2">Importar imagens</h4>
+                    </div>
+                    <div class="modal-body">
+
+                            <form id="image-form" data-parsley-validate="" novalidate="">
+
+                                <div id="msg-image-form" class="alert alert-danger hide" role="alert"></div>
+
+                                <div class="col-lg-offset-1 col-md-8 col-sm-8 col-xs-12">
+                                    <label for="contest_id">Concurso:</label>
+                                    <select id="contest_id" name="contest_id" class="form-control" required="true">
+                                        <option value="">Escolha uma opção..</option>
+
+                                        {% for contest in contests %}
+                                            <option value="{{ contest.id }}">{{ contest.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <div class="col-lg-offset-1 col-md-10 col-sm-10 col-xs-12">
+                                    <label for="path">
+                                        Caminho:
+                                        <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="Caminho das imagens no disco"></i>
+                                    </label>
+                                    <input type="text" id="path" class="form-control" name="path" required="true" placeholder="/tmp/images">
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <div class="col-lg-offset-1 col-md-10 col-sm-10 col-xs-12">
+                                    <label for="url">
+                                        URL base:
+                                        <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="Início da URL para acesso externo"></i>
+                                    </label>
+                                    <input type="email" id="url" class="form-control" name="url" data-parsley-trigger="change" required="false" placeholder="http://bfawards.mobly.prod">
+                                </div>
+                            </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="submit-image-form">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 {% endblock %}
 
 {% block scripts %}
 
+    <script type="application/javascript">
+        let urlImportImages = '{{ url('admin_import_images') }}'
+
+    </script>
+
     <script src="{{ asset('/js/admin/dataTable.js') }}"></script>
+    <script src="{{ asset('/js/admin/importImages.js') }}"></script>
     <script src="{{ asset('/js/admin-theme/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('/js/admin-theme/datatables/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('/js/admin-theme/datatables/dataTables.buttons.min.js') }}"></script>

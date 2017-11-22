@@ -6,6 +6,9 @@ use Admin\Core\ImagesLoader;
 use Models\Contest;
 use Models\Image;
 use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ImageController
 {
@@ -14,27 +17,46 @@ class ImageController
         $imageModel = new Image($app);
         $images = $imageModel->findAllWithRelatedData();
 
-        return $app['twig']->render('image/index.twig', ['images' => $images]);
+        $contestModel = new Contest($app);
+        $contests = $contestModel->findAll();
+
+        return $app['twig']->render('image/index.twig', ['images' => $images, 'contests' => $contests]);
     }
 
-    public function import($contestId = null, Application $app)
+    public function import(Request $request, Application $app)
     {
-        $modelContest = new Contest($app);
-        $contest = null;
+        $response = [];
 
-        if (!$contestId) {
-            $contest = $modelContest->findOneRunning();
+        try {
+            $data = $request->request->all();
+            $modelContest = new Contest($app);
+
+            if (!$data['contest_id']) {
+                throw new \Exception('O campo "Concurso" é obrigatório');
+            }
+
+            if (!$data['path']) {
+                throw new \Exception('O campo "Caminho" é obrigatório');
+            }
+
+            $contest = $modelContest->find($data['contest_id']);
+
+            if (!$contest) {
+                throw new \Exception('Concurso não encontrado');
+            }
+
+            $imageLoader = new ImagesLoader($app);
+            $imageLoader->load($contest, $data['path'], $data['url']);
+
+            $response = [
+                'code' => Response::HTTP_OK,
+                'message' => "Imagens importadas com sucesso!"
+            ];
+        } catch (\Exception $e) {
+            $response['code'] = Response::HTTP_BAD_REQUEST;
+            $response['message'] = $e->getMessage();
         }
 
-        if ($contestId) {
-            $contest = $modelContest->find($contest);
-        }
-
-        if (!$contest) {
-            throw new \Exception('Nenhum concurso está acontecendo no momento');
-        }
-
-        $imageLoader = new ImagesLoader($app);
-        $imageLoader->load($contest);
+        return new JsonResponse($response);
     }
 }
