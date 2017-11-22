@@ -27,13 +27,15 @@ class Image extends AbstractModel
         return $this->db->fetchAll($sql);
     }
 
-    public function insert($contestId, $path, $url)
+    public function insert($contestId, $path, $url, $width, $height)
     {
         return $this->db->insert('image', [
             'contest_id' => (int) $contestId,
             'path' => $path,
             'url' => $url,
-            'created_at' => (new \DateTime())->format('Y-m-d H:i:s')
+            'created_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'width' => $width,
+            'height' => $height
         ]);
     }
 }

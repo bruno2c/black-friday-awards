@@ -28,7 +28,9 @@ class ImagesLoader
 
         foreach ($finder as $file) {
             $url = $baseUrl . '/' . $file->getFilename();
-            $modelImage->insert($contest['id'], $file->getRealPath(), $url);
+            list($width, $height) = getimagesize($file->getRealPath());
+
+            $modelImage->insert($contest['id'], $file->getRealPath(), $url, $width, $height);
         }
     }
 }
