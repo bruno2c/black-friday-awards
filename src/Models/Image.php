@@ -14,7 +14,7 @@ class Image extends AbstractModel
 
     public function findByContest($contestId)
     {
-        $sql = "SELECT i.* FROM image i WHERE i.contest_id = ?";
+        $sql = "SELECT i.path src, i.* FROM image i WHERE i.contest_id = ?";
         return $this->db->fetchAll($sql, [(int) $contestId]);
     }
 

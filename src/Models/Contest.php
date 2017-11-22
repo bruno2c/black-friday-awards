@@ -33,11 +33,9 @@ class Contest extends AbstractModel
                     p.name, COUNT(pv.id) total_votes
                 FROM
                     contest c
-                        JOIN
+                JOIN
                     image i ON i.contest_id = c.id
-                        JOIN
-                    participant p ON p.id = i.owner_id
-                        JOIN
+                JOIN
                     participant_vote pv ON pv.image_id = i.id
                 WHERE
                     c.id = ?
