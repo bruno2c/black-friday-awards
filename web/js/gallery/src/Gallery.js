@@ -56,7 +56,6 @@ class Gallery extends React.Component {
         });
     }
     openLightbox(event, obj) {
-        console.log('open')
         this.setState({
             currentImage: obj.index,
             lightboxIsOpen: true,
