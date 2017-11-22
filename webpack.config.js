@@ -3,9 +3,10 @@ const path = require('path');
 
 module.exports = {
   context: path.resolve(__dirname, 'web/js/gallery/examples/src'),
-  entry: {
-    app: './app.js',
-  },
+  entry: [
+    'babel-polyfill',
+    './app.js',
+  ],
   output: {
     filename: 'app.js',
     publicPath: '/',
