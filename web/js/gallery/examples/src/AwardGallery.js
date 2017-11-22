@@ -12,10 +12,7 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import fetch from 'isomorphic-fetch'
 import {
-    lime100,
     white,
-    green300,
-    indigo900,
 } from 'material-ui/styles/colors';
 
 function debounce(func, wait, immediate) {
@@ -47,7 +44,7 @@ function authenticate() {
             this.setState({remainingVotes: json.remaining_votes});
             this.setState({name: json.participant.name});
         } catch (e) {
-            console.log('An error', e)
+            console.log('Cpf não encontrado', e)
         }
     }
 }
@@ -69,6 +66,7 @@ class AwardGallery extends React.Component {
             contestId: 1,
             isLogged: false,
             remainingVotes: 0,
+            openDialogConfirm: false
         };
         this.selectPhoto = this.selectPhoto.bind(this);
         this.toggleSelect = this.toggleSelect.bind(this)
@@ -147,14 +145,33 @@ class AwardGallery extends React.Component {
         this.setState({openDialog: false});
     };
 
+    handleConfirm = () => {
+        // if (this.state.loginCpf == false) {
+        //     this.setState({error: 'O campo CPF é obrigatório'});
+        //     return;
+        // }
+        // this.authenticate();
+        this.setState({openDialogConfirm: false});
+    };
+
     handleClose = () => {
         this.setState({error: ''});
         this.setState({openDialog: false});
     };
 
+
+    handleCloseConfirm = () => {
+        this.setState({error: ''});
+        this.setState({openDialogConfirm: false});
+    };
+
     handleChange(event) {
         this.setState({loginCpf: event.target.value});
         this.setState({error: ''});
+    };
+
+    handleOpenConfirm(event) {
+        this.setState({openDialogConfirm: true});
     };
 
     render() {
@@ -174,6 +191,19 @@ class AwardGallery extends React.Component {
                 label="Cancelar"
                 secondary={true}
                 onClick={this.handleClose}
+            />
+        ];
+
+        const actionsConfirm = [
+            <FlatButton
+                label="Ok"
+                primary={true}
+                onClick={this.handleConfirm}
+            />,
+            <FlatButton
+                label="Cancelar"
+                secondary={true}
+                onClick={this.handleCloseConfirm}
             />
         ];
 
@@ -203,7 +233,7 @@ class AwardGallery extends React.Component {
                     {!this.state.loadedAll && <div className="loading-msg" id="msg-loading-more">Loading</div>}
                 </div>
                 {count > 0 ?
-                    <FloatingActionButton style={{  position: 'fixed', top: '90%',  left:'95.5%' }} onClick={(e) => selectClick(e, {index, photo})}>
+                    <FloatingActionButton style={{  position: 'fixed', top: '90%',  left:'95.5%' }} onClick={(e) => this.handleOpenConfirm()}>
                     <ContentSelect/>
                     </FloatingActionButton>
                     : null}
@@ -221,6 +251,15 @@ class AwardGallery extends React.Component {
                     >
                         {/*<InputMask mask="999.999.999-99" maskChar=" " />*/}
                     </TextField>
+                </Dialog>
+
+                <Dialog
+                    title="Confirmar voto?"
+                    actions={actionsConfirm}
+                    modal={false}
+                    open={this.state.openDialogConfirm}
+                    onRequestClose={this.handleCloseConfirm}
+                >
                 </Dialog>
             </div>
                 </div>
