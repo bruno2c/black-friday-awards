@@ -44,4 +44,27 @@ class Contest extends AbstractModel
 
         return $this->db->fetchAll($sql, [$contestId]);
     }
+
+    public function getWinners($contestId)
+    {
+        $contest = Contest::find($contestId);
+        $limit = (int) $contest['max_winners'];
+
+        $sql = "SELECT 
+                    i.*, COUNT(pv.id) total_votes
+                FROM
+                    contest c
+                JOIN
+                    image i ON i.contest_id = c.id
+                JOIN
+                    participant_vote pv ON pv.image_id = i.id
+                WHERE
+                    c.id = ?
+                GROUP BY i.id
+                ORDER BY COUNT(pv.id) DESC
+                LIMIT {$limit}
+                ";
+
+        return $this->db->fetchAll($sql, [(int) $contest['id']]);
+    }
 }

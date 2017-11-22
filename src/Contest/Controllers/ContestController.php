@@ -68,4 +68,24 @@ class ContestController
         return new JsonResponse($response);
     }
 
+    public function winners(Application $app)
+    {
+        $response = [];
+
+        try {
+            $contestModel = new Contest($app);
+            $ranking = $contestModel->getWinners(1);
+
+            $response = [
+                'code' => Response::HTTP_OK,
+                'ranking' => $ranking
+            ];
+        } catch (\Exception $e) {
+            $response['code'] = Response::HTTP_BAD_REQUEST;
+            $response['message'] = $e->getMessage();
+        }
+
+        return new JsonResponse($response);
+    }
+
 }
