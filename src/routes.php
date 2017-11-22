@@ -7,12 +7,12 @@ $app->mount('/admin', function ($admin) {
     $admin->get('/participants', 'Admin\Controllers\ParticipantController::index')->bind('admin_participants');
     $admin->get('/images', 'Admin\Controllers\ImageController::index')->bind('admin_images');
     $admin->get('/images/import', 'Admin\Controllers\ImageController::import')->bind('admin_import_images');
-//    $admin->get('/login_check', 'Admin\Controllers\LoginController::loginCheck')->bind('admin_login_check');
 });
 
 $app->mount('/', function ($contest) {
     $contest->get('/', 'Contest\Controllers\IndexController::index');
     $contest->match('/contest/running', 'Contest\Controllers\ContestController::running');
+    $contest->match('/contest/{contestId}', 'Contest\Controllers\ContestController::index');
     $contest->match('/contest/{contestId}/participant/{document}', 'Contest\Controllers\ParticipantController::index');
     $contest->post('/contest/{contestId}/participant/{document}/image/{imageId}', 'Contest\Controllers\ParticipantController::vote');
     $contest->get('/admin_login', 'Admin\Controllers\LoginController::index')->bind('admin_login');
