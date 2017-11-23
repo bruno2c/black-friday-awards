@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "material-ui": "^0.19.4",
-    "prop-types": "~15.6.0"
+    "prop-types": "~15.6.0",
+    "react-input-mask": "^1.0.7"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

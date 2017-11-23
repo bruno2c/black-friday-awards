@@ -5,6 +5,10 @@ import SelectedImage from './SelectedImage';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentSelect from 'material-ui/svg-icons/content/send';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
+import InputMask from 'react-input-mask'
 
 function debounce(func, wait, immediate) {
     let timeout;
@@ -32,16 +36,24 @@ class AwardGallery extends React.Component {
             selectAll: false,
             pageNum: 1,
             totalPages: 3,
-            loadedAll: false
+            loadedAll: false,
+            openDialog: false,
+            loginCpf: false
         };
         this.selectPhoto = this.selectPhoto.bind(this);
         this.toggleSelect = this.toggleSelect.bind(this)
         this.handleScroll = this.handleScroll.bind(this);
         this.loadMorePhotos = this.loadMorePhotos.bind(this);
+        this.loadMorePhotos = this.loadMorePhotos.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.loadMorePhotos = debounce(this.loadMorePhotos, 200);
     }
 
     selectPhoto(event, obj) {
+        if (this.state.loginCpf == '') {
+            this.handleOpen();
+            return;
+        }
         let photos = this.state.photos;
         let count = 1;
         photos.filter(key => {
@@ -86,6 +98,24 @@ class AwardGallery extends React.Component {
         });
     }
 
+    handleOpen() {
+        this.setState({openDialog: true});
+    };
+
+    handleLogin= () => {
+        // this.autenticate(this.state.loginCpf);
+        this.setState({openDialog: false});
+    };
+
+    handleClose = () => {
+        this.setState({openDialog: false});
+    };
+
+    handleChange(event) {
+        this.setState({loginCpf: event.target.value});
+        console.log(this.state.loginCpf);
+    };
+
     render() {
         let count = 0;
         this.state.photos.filter(key => {
@@ -93,6 +123,18 @@ class AwardGallery extends React.Component {
                 count++
             }
         });
+        const actions = [
+            <FlatButton
+                label="Ok"
+                primary={true}
+                onClick={this.handleLogin}
+            />,
+            <FlatButton
+                label="Cancelar"
+                secondary={true}
+                onClick={this.handleClose}
+            />
+        ];
 
         return (
             <MuiThemeProvider>
@@ -108,6 +150,20 @@ class AwardGallery extends React.Component {
                     <ContentSelect/>
                     </FloatingActionButton>
                     : null}
+                <Dialog
+                    title="Informe o CPF"
+                    actions={actions}
+                    modal={false}
+                    open={this.state.openDialog}
+                    onRequestClose={this.handleClose}
+                >
+                    <TextField
+                        floatingLabelText="CPF"
+                        onChange={this.handleChange}
+                    >
+                        <InputMask mask="999.999.999-99" maskChar=" " />
+                    </TextField>
+                </Dialog>
             </div>
             </MuiThemeProvider>
         );
