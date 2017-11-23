@@ -45,6 +45,19 @@ function authenticate() {
             this.setState({isLogged: true});
             this.setState({remainingVotes: json.remaining_votes});
             this.setState({name: json.participant.name});
+            this.setState({getVotes: json.votes});
+
+            let photos = this.state.photos;
+
+            json.votes.filter(votes => {
+                this.state.photos.filter((key, index) => {
+                  if (key.id == votes.image_id) {
+                      photos[index].disable = true
+                  }
+                });
+            })
+
+            this.setState({photos: photos});
         } catch (e) {
             console.log('Cpf não encontrado', e)
         }
@@ -56,7 +69,6 @@ function confirmVote() {
     return async function () {
 
         let data = new FormData();
-        console.log(this.state.votes);
         data.append('images', this.state.votes);
         data.append('contest_id', this.state.contestId);
         data.append('document', this.state.loginCpf);
@@ -96,7 +108,8 @@ class AwardGallery extends React.Component {
             openDialogConfirm: false,
             votes: [],
             responseVote: '',
-            snackOpen: false
+            snackOpen: false,
+            getVotes: ''
         };
         this.selectPhoto = this.selectPhoto.bind(this);
         this.toggleSelect = this.toggleSelect.bind(this)
@@ -136,12 +149,12 @@ class AwardGallery extends React.Component {
             this.setState({votes: imagesId })
         } else {
             let teste = this.state.votes.indexOf(photos[obj.index].id);
-            console.log(teste)
             let arr = this.state.votes.splice(teste, 1);
             let ts = this.state.votes
             ts = {$splice: [[teste, 1]]};
             let i =  update(this.state.votes, ts)
         }
+
         this.setState({photos: photos});
     }
 
@@ -178,7 +191,7 @@ class AwardGallery extends React.Component {
         this.setState({openDialog: true});
     };
 
-    handleLogin= () => {
+    handleLogin = () => {
         if (this.state.loginCpf == false) {
             this.setState({error: 'O campo CPF é obrigatório'});
             return;
@@ -187,18 +200,20 @@ class AwardGallery extends React.Component {
         this.setState({openDialog: false});
     };
 
+
     handleConfirm = () => {
         let imagesId = []
         let photos = this.state.photos;
+
         photos.filter(key => {
             if (key.selected == true) {
                 imagesId.push(key.id)
             }
         });
+
         this.confirmVote();
 
         setTimeout(function () {
-            console.log('teste')
             window.location.reload();
         }, 3000);
         // var yourUl = document.getElementById("alertDiv");
@@ -232,7 +247,6 @@ class AwardGallery extends React.Component {
     };
 
     render() {
-        console.log(this.state.votes);
         let count = 0;
         this.state.photos.filter(key => {
             if (key.selected == true) {
@@ -295,7 +309,7 @@ class AwardGallery extends React.Component {
 
 
                 <div style={{overflowY: 'auto'}}>
-                    <Gallery photos={this.state.photos} columns={this.props.columns} onClick={this.selectPhoto}
+                    <Gallery photos={this.state.photos} columns={this.props.columns} onClick={this.selectPhoto} enableSelect={this.state.remainingVotes  < 1 ? false : true}
                              ImageComponent={SelectedImage}/>
 
                     {!this.state.loadedAll && <div className="loading-msg" id="msg-loading-more">Loading</div>}

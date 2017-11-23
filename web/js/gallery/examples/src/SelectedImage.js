@@ -25,6 +25,7 @@ const SelectedImage = ({ index, onClick, photo, margin, selectClick}) => {
   const sx = (100 - ((30 / photo.width) * 100)) / 100;
   const sy = (100 - ((30 / photo.height) * 100)) / 100;
   selectedImgStyle.transform = `translateZ(0px) scale3d(${sx}, ${sy}, 1)`;
+  console.log(photo)
 	return (
 	    <MuiThemeProvider>
     <div style={{margin, width:photo.width, ...cont}} className={'cont' + (!photo.selected ? ' selected' : '')}>
@@ -36,10 +37,10 @@ const SelectedImage = ({ index, onClick, photo, margin, selectClick}) => {
       {`.cont.selected:hover{outline:2px solid #06befa}`}
       </style>
             { photo.selected ?
-                <FloatingActionButton style={{  position: 'absolute', top: '78%',  left:'86%' }} onClick={(e) => selectClick(e, {index, photo})} >
+                <FloatingActionButton  style={{  position: 'absolute', top: '78%',  left:'86%' }} onClick={(e) => selectClick(e, {index, photo})}  >
                 <ContentSelect/>
                 </FloatingActionButton>:
-                <FloatingActionButton secondary={true} style={{  position: 'absolute', top: '78%',  left:'86%' }} onClick={(e) => selectClick(e, {index, photo})}>
+                <FloatingActionButton disabled={photo.disable ? true : false} secondary={true} style={{  position: 'absolute', top: '78%',  left:'86%' }} onClick={(e) => selectClick(e, {index, photo})}>
                 <ContentUnSelect />
                 </FloatingActionButton>
             }
