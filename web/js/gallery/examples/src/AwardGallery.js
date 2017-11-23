@@ -10,6 +10,7 @@ import UserIcon from 'material-ui/svg-icons/action/face'
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
 import fetch from 'isomorphic-fetch'
 import {
     white,
@@ -95,6 +96,7 @@ class AwardGallery extends React.Component {
             openDialogConfirm: false,
             votes: [],
             responseVote: '',
+            snackOpen: false
         };
         this.selectPhoto = this.selectPhoto.bind(this);
         this.toggleSelect = this.toggleSelect.bind(this)
@@ -122,7 +124,7 @@ class AwardGallery extends React.Component {
             }
         });
         if (count > this.state.remainingVotes && photos[obj.index].selected != true) {
-            alert(`Só é possível votar em ${this.state.remainingVotes} fotos`);
+            alert(`Você possui ${this.state.remainingVotes} voto(s) restante(s)`);
             return false;
         }
         photos[obj.index].selected = !photos[obj.index].selected;
@@ -199,8 +201,9 @@ class AwardGallery extends React.Component {
             console.log('teste')
             window.location.reload();
         }, 3000);
-        var yourUl = document.getElementById("alertDiv");
-        yourUl.style.display = yourUl.style.display === 'none' ? '' : 'none';
+        // var yourUl = document.getElementById("alertDiv");
+        // yourUl.style.display = yourUl.style.display === 'none' ? '' : 'none';
+        this.setState({snackOpen: true});
         this.setState({openDialogConfirm: false});
 
         //
@@ -278,9 +281,16 @@ class AwardGallery extends React.Component {
                     </div>
                 : null
                 }
-                    <div id="alertDiv" disabled={true} style={{float: 'left', position: 'absolute', top: 29, right: 100, display: 'none'}}>
-                        <div style={{backgroundColor: 'green'}}><h1 style={{color: 'white'}}>Voto realizado com sucesso</h1></div>
-                    </div>
+                    {/*<div id="alertDiv"  disabled={true} style={{float: 'left', position: 'absolute', top: 29, right: 100, display: 'none'}}>*/}
+                        {/*<div style={{backgroundColor: 'green'}}><h1 style={{color: 'white'}}>Voto realizado com sucesso</h1></div>*/}
+                    {/*</div>*/}
+                    <Snackbar
+                        open={this.state.snackOpen}
+                        message="Voto realizado com sucesso"
+                        autoHideDuration={4000}
+                        style={{color: 'red'}}
+                        onRequestClose={this.handleRequestClose}
+                    />
             <div style={{position: 'relative'}}>
 
 
