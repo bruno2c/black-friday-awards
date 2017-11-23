@@ -9,6 +9,7 @@ module.exports = {
   ],
   output: {
     filename: 'app.js',
+    path: path.resolve(__dirname, 'web/js/gallery/dist'),
     publicPath: '/',
   },
   devServer: {
