@@ -14,6 +14,7 @@ import fetch from 'isomorphic-fetch'
 import {
     white,
 } from 'material-ui/styles/colors';
+import update from 'react-addons-update';
 
 function debounce(func, wait, immediate) {
     let timeout;
@@ -50,16 +51,26 @@ function authenticate() {
 }
 
 
-function confirmVote(imagesId) {
+function confirmVote() {
     return async function () {
-        try {
-            const response = await fetch(`http://bfawards.local/contest/${this.state.contestId}/participant/${this.state.loginCpf}/image/${imagesId}`, {
-                credentials: 'same-origin'
-            });
-            const json = await response.json();
 
+        let data = new FormData();
+        console.log(this.state.votes);
+        data.append('images', this.state.votes);
+        data.append('contest_id', this.state.contestId);
+        data.append('document', this.state.loginCpf);
+        const url = 'http://bfawards.local/contest/vote';
+
+        try {
+            const response = await fetch(url, {
+                body: data,
+                credentials: 'same-origin',
+                method: 'POST'
+            })
+            const json = await response.json()
+            return  json.code;
         } catch (e) {
-            console.log('Cpf não encontrado', e)
+            console.log(e)
         }
     }
 }
@@ -81,7 +92,9 @@ class AwardGallery extends React.Component {
             contestId: 1,
             isLogged: false,
             remainingVotes: 0,
-            openDialogConfirm: false
+            openDialogConfirm: false,
+            votes: [],
+            responseVote: '',
         };
         this.selectPhoto = this.selectPhoto.bind(this);
         this.toggleSelect = this.toggleSelect.bind(this)
@@ -95,8 +108,6 @@ class AwardGallery extends React.Component {
 
     }
 
-
-
     selectPhoto(event, obj) {
         if (this.state.loginCpf == '' && this.state.isLogged == false) {
             this.handleOpen();
@@ -104,6 +115,7 @@ class AwardGallery extends React.Component {
         }
         let photos = this.state.photos;
         let count = 1;
+
         photos.filter(key => {
             if (key.selected == true) {
                 count++
@@ -113,8 +125,21 @@ class AwardGallery extends React.Component {
             alert(`Só é possível votar em ${this.state.remainingVotes} fotos`);
             return false;
         }
-        console.log(photos[obj.index]);
         photos[obj.index].selected = !photos[obj.index].selected;
+
+        if (photos[obj.index].selected  == true) {
+            var imagesId = this.state.votes.slice()
+
+            imagesId.push(photos[obj.index].id)
+            this.setState({votes: imagesId })
+        } else {
+            let teste = this.state.votes.indexOf(photos[obj.index].id);
+            console.log(teste)
+            let arr = this.state.votes.splice(teste, 1);
+            let ts = this.state.votes
+            ts = {$splice: [[teste, 1]]};
+            let i =  update(this.state.votes, ts)
+        }
         this.setState({photos: photos});
     }
 
@@ -165,12 +190,21 @@ class AwardGallery extends React.Component {
         let photos = this.state.photos;
         photos.filter(key => {
             if (key.selected == true) {
-                console.log(key.id)
                 imagesId.push(key.id)
             }
         });
-        // this.confirmVote(imagesId)
+        this.confirmVote();
+
+        setTimeout(function () {
+            console.log('teste')
+            window.location.reload();
+        }, 3000);
+        var yourUl = document.getElementById("alertDiv");
+        yourUl.style.display = yourUl.style.display === 'none' ? '' : 'none';
         this.setState({openDialogConfirm: false});
+
+        //
+
     };
 
     handleClose = () => {
@@ -195,6 +229,7 @@ class AwardGallery extends React.Component {
     };
 
     render() {
+        console.log(this.state.votes);
         let count = 0;
         this.state.photos.filter(key => {
             if (key.selected == true) {
@@ -243,6 +278,9 @@ class AwardGallery extends React.Component {
                     </div>
                 : null
                 }
+                    <div id="alertDiv" disabled={true} style={{float: 'left', position: 'absolute', top: 29, right: 100, display: 'none'}}>
+                        <div style={{backgroundColor: 'green'}}><h1 style={{color: 'white'}}>Voto realizado com sucesso</h1></div>
+                    </div>
             <div style={{position: 'relative'}}>
 
 

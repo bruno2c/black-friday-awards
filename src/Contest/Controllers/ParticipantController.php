@@ -54,8 +54,8 @@ class ParticipantController
         $app['db']->beginTransaction();
 
         try {
-            $data = json_decode($request->getContent(), true);
 
+            $data = $request->request->all();
             if (!isset($data['document'])) {
                 throw new \Exception('O campo "document" é obrigatório');
             }
@@ -67,6 +67,8 @@ class ParticipantController
             if (!isset($data['images']) || !count($data['images'])) {
                 throw new \Exception('O campo "images" é obrigatório');
             }
+
+            $arrImages = explode(',', $data['images']);
 
             $participantModel = new Participant($app);
             $participant = $participantModel->findOneByDocument($data['document']);
@@ -86,11 +88,11 @@ class ParticipantController
                 throw new \Exception('Voto não registrado: Número máximo de votos excedido');
             }
 
-            if (count($data['images']) > $remainingVotes) {
-                throw new \Exception(sprintf('Você escolheu %s foto(s), mas só possui %s voto(s) restante(s)', count($data['images']), $remainingVotes));
+            if (count($arrImages) > $remainingVotes) {
+                throw new \Exception(sprintf('Você escolheu %s foto(s), mas só possui %s voto(s) restante(s)', count($arrImages), $remainingVotes));
             }
 
-            foreach ($data['images'] as $imageId) {
+            foreach ($arrImages as $imageId) {
                 $imageModel = new Image($app);
                 $image = $imageModel->find($imageId);
 

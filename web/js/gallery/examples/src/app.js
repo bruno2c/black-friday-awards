@@ -12,8 +12,6 @@ function getImagesAndContest() {
                 credentials: 'same-origin'
             });
             const json = await response.json();
-
-            console.log(json)
             this.setState({photos: json.images});
 
         } catch (e) {
