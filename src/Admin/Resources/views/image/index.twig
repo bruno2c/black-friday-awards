@@ -24,6 +24,8 @@
                             <th>Participante</th>
                             <th>Caminho</th>
                             <th>URL</th>
+                            <th>Dimensões (LxA)</th>
+                            <th>Criado em</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -34,6 +36,8 @@
                                 <td>{{ image.participant_name }}</td>
                                 <td>{{ image.path }}</td>
                                 <td><a href="{{ image.url }}" target="_blank">{{ image.url }}</a></td>
+                                <td>{{ image.width }}x{{ image.height }}</td>
+                                <td>{{ image.created_at }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>

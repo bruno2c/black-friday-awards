@@ -17,6 +17,7 @@
                             <th>ID</th>
                             <th>Nome</th>
                             <th>Máximo de votos</th>
+                            <th>Máximo de ganhadores</th>
                             <th>Status</th>
                         </tr>
                         </thead>
@@ -26,6 +27,7 @@
                                     <th scope="row">{{ contest.id }}</th>
                                     <td>{{ contest.name }}</td>
                                     <td>{{ contest.max_votes }}</td>
+                                    <td>{{ contest.max_winners }}</td>
                                     <td>{{ contest.status }}</td>
                                 </tr>
                             {% endfor %}
