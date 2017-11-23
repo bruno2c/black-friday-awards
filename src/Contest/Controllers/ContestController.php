@@ -43,8 +43,6 @@ class ContestController
         $response = [];
 
         try {
-            $contestId = base64_decode($contestId);
-
             $contestModel = new Contest($app);
             $contest = $contestModel->find($contestId);
 
