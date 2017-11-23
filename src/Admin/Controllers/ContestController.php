@@ -15,10 +15,10 @@ class ContestController
         return $app['twig']->render('contest/index.twig', ['contests' => $contests]);
     }
 
-    public function ranking(Application $app)
+    public function ranking($contestId = null, Application $app)
     {
         $contestModel = new Contest($app);
-        $ranking = $contestModel->getRanking(1);
+        $ranking = $contestModel->getRanking($contestId);
 
         return $app['twig']->render('contest/ranking.twig', ['ranking' => $ranking]);
     }

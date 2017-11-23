@@ -30,7 +30,7 @@ class Contest extends AbstractModel
     public function getRanking($contestId)
     {
         $sql = "SELECT 
-                    p.name, COUNT(pv.id) total_votes
+                    i.*, COUNT(pv.id) total_votes
                 FROM
                     contest c
                 JOIN
@@ -40,7 +40,7 @@ class Contest extends AbstractModel
                 WHERE
                     c.id = ?
                 GROUP BY i.id
-                ORDER BY COUNT(pv.id) ASC";
+                ORDER BY COUNT(pv.id) DESC";
 
         return $this->db->fetchAll($sql, [$contestId]);
     }
