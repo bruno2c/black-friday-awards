@@ -1,61 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Measure from 'react-measure';
+import fetch from 'isomorphic-fetch'
 import AwardGallery from './AwardGallery';
 
-function importAll(r) {
-    return r.keys().map(r);
-}
 
-// const images = importAll(require.context('../../image', false, /\.(png|jpe?g|svg)$/));
+function getImagesAndContest() {
+    return async function () {
+        try {
+            const response = await fetch(`http://bfawards.local/contest/running`, {
+                credentials: 'same-origin'
+            });
+            const json = await response.json();
+
+            console.log(json)
+            this.setState({photos: json.images});
+
+        } catch (e) {
+            console.log('Cpf não encontrado', e)
+        }
+    }
+}
 
 class App extends React.Component {
     constructor() {
         super();
         this.state = {width: -1};
+        this.getImagesAndContest = getImagesAndContest();
     }
 
     componentDidMount() {
+        this.getImagesAndContest();
     }
-
-
-
-
-    getImagesAndContest() {
-        return async function () {
-            try {
-                const response = await fetch('http://bfawards.local/contest/running', {
-                    credentials: 'same-origin'
-                });
-                const json = await response.json();
-                this.setState({contestId: json.contest.id});
-            } catch (e) {
-                console.log('An error', e)
-            }
-        }
-        // let url = `http://bfawards.local/contest/${this.state.contestId}/participant/${this.state.loginCpf}`;
-        // let url = 'http://bfawards.local/contest/running';
-    }
-
 
 
     render() {
-        // let PHOTO_SET = [];
-        //
-        // let wid = 10;
-        // let hei = 3;
-        // images.map((row, index) => {
-        //
-        //         PHOTO_SET[index] =
-        //             {
-        //                 src: row,
-        //                 width: sets[index].width,
-        //                 height: sets[index].height
-        //             }
-        //         hei++
-        //         wid++
-        //     }
-        // )
         if (this.state.photos) {
             const width = this.state.width;
             return (

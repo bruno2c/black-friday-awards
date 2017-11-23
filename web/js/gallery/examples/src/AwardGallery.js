@@ -50,6 +50,21 @@ function authenticate() {
 }
 
 
+function confirmVote(imagesId) {
+    return async function () {
+        try {
+            const response = await fetch(`http://bfawards.local/contest/${this.state.contestId}/participant/${this.state.loginCpf}/image/${imagesId}`, {
+                credentials: 'same-origin'
+            });
+            const json = await response.json();
+
+        } catch (e) {
+            console.log('Cpf não encontrado', e)
+        }
+    }
+}
+
+
 class AwardGallery extends React.Component {
     constructor(props) {
         super(props);
@@ -75,6 +90,7 @@ class AwardGallery extends React.Component {
         this.loadMorePhotos = this.loadMorePhotos.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.authenticate = authenticate();
+        this.confirmVote = confirmVote();
         this.loadMorePhotos = debounce(this.loadMorePhotos, 200);
 
     }
@@ -93,7 +109,6 @@ class AwardGallery extends React.Component {
                 count++
             }
         });
-        console.log(this.state.remainingVotes)
         if (count > this.state.remainingVotes && photos[obj.index].selected != true) {
             alert(`Só é possível votar em ${this.state.remainingVotes} fotos`);
             return false;
@@ -146,11 +161,15 @@ class AwardGallery extends React.Component {
     };
 
     handleConfirm = () => {
-        // if (this.state.loginCpf == false) {
-        //     this.setState({error: 'O campo CPF é obrigatório'});
-        //     return;
-        // }
-        // this.authenticate();
+        let imagesId = []
+        let photos = this.state.photos;
+        photos.filter(key => {
+            if (key.selected == true) {
+                console.log(key.id)
+                imagesId.push(key.id)
+            }
+        });
+        // this.confirmVote(imagesId)
         this.setState({openDialogConfirm: false});
     };
 
@@ -171,6 +190,7 @@ class AwardGallery extends React.Component {
     };
 
     handleOpenConfirm(event) {
+
         this.setState({openDialogConfirm: true});
     };
 
@@ -254,7 +274,7 @@ class AwardGallery extends React.Component {
                 </Dialog>
 
                 <Dialog
-                    title="Confirmar voto?"
+                    title="Deseja Confirmar ?"
                     actions={actionsConfirm}
                     modal={false}
                     open={this.state.openDialogConfirm}

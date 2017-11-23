@@ -36,7 +36,7 @@ const SelectedImage = ({ index, onClick, photo, margin, selectClick}) => {
       {`.cont.selected:hover{outline:2px solid #06befa}`}
       </style>
             { photo.selected ?
-                <FloatingActionButton style={{  position: 'absolute', top: '78%',  left:'86%' }} onClick={(e) => selectClick(e, {index, photo})}>
+                <FloatingActionButton style={{  position: 'absolute', top: '78%',  left:'86%' }} onClick={(e) => selectClick(e, {index, photo})} >
                 <ContentSelect/>
                 </FloatingActionButton>:
                 <FloatingActionButton secondary={true} style={{  position: 'absolute', top: '78%',  left:'86%' }} onClick={(e) => selectClick(e, {index, photo})}>
