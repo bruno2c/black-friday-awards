@@ -2,16 +2,18 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-  context: path.resolve(__dirname, 'examples/src'),
-  entry: {
-    app: './app.js',
-  },
+  context: path.resolve(__dirname, 'web/js/gallery/examples/src'),
+  entry: [
+    'babel-polyfill',
+    './app.js',
+  ],
   output: {
     filename: 'app.js',
+    path: path.resolve(__dirname, 'web/js/gallery/dist'),
     publicPath: '/',
   },
   devServer: {
-    contentBase: path.resolve(__dirname, 'examples/src'),
+    contentBase: path.resolve(__dirname, 'web/js/gallery/examples/src'),
     port: 8000,
   },
   module: {
@@ -28,7 +30,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'react-photo-gallery': path.resolve(__dirname, 'src/Gallery'),
+      'react-photo-gallery': path.resolve(__dirname, 'web/js/gallery/src/Gallery'),
     }
   },
   plugins: [

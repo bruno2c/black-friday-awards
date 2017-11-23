@@ -1,0 +1,15 @@
+<?php
+
+require_once __DIR__.'/../vendor/autoload.php';
+
+$app = new Symfony\Component\Console\Application();
+
+//Migrations commands
+$app->add(new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand());
+$app->add(new \Doctrine\DBAL\Migrations\Tools\Console\Command\ExecuteCommand());
+$app->add(new \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand());
+$app->add(new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand());
+$app->add(new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand());
+$app->add(new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand());
+
+$app->run();

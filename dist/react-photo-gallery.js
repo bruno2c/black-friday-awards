@@ -1,11 +1,11 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('prop-types')) :
-	typeof define === 'function' && define.amd ? define(['react', 'prop-types'], factory) :
-	(global.Gallery = factory(global.React,global.PropTypes));
-}(this, (function (React,PropTypes) { 'use strict';
+'use strict';
 
-var React__default = 'default' in React ? React['default'] : React;
-PropTypes = PropTypes && PropTypes.hasOwnProperty('default') ? PropTypes['default'] : PropTypes;
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var React = require('react');
+var React__default = _interopDefault(React);
+var PropTypes = _interopDefault(require('prop-types'));
+var Lightbox = _interopDefault(require('react-images'));
 
 var asyncGenerator = function () {
   function AwaitValue(value) {
@@ -292,15 +292,21 @@ Photo.propTypes = {
 };
 
 function round(value, decimals) {
+  if (!decimals) decimals = 0;
   return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
 }
+
+// return two decimal places rounded number
 function ratio(_ref) {
   var width = _ref.width,
       height = _ref.height;
 
-  return width / height;
+  return round(width / height, 2);
 }
 
+// takes the Gallery's photos prop object, width of the container,
+// margin between photos Gallery prop, and columns Gallery prop.
+// calculates, sizes based on columns and returns the photos object with new height/width props
 function computeSizes(_ref2) {
   var photos = _ref2.photos,
       columns = _ref2.columns,
@@ -326,6 +332,9 @@ function computeSizes(_ref2) {
       return result + ratio(photo);
     }, 0);
     var rowWidth = width - row.length * (margin * 2);
+
+    // assign height, but let height of a single photo in the last
+    // row not expand across columns so divide by columns
     var height = rowIndex !== lastRowIndex || row.length > 1 ? // eslint-disable-line
     rowWidth / totalRatio : rowWidth / columns / totalRatio;
 
@@ -341,120 +350,162 @@ function computeSizes(_ref2) {
   }, []);
 }
 
-var Gallery$1 = function (_React$Component) {
-  inherits(Gallery, _React$Component);
+var Gallery = function (_React$Component) {
+    inherits(Gallery, _React$Component);
 
-  function Gallery() {
-    classCallCheck(this, Gallery);
+    function Gallery() {
+        classCallCheck(this, Gallery);
 
-    var _this = possibleConstructorReturn(this, (Gallery.__proto__ || Object.getPrototypeOf(Gallery)).call(this));
+        var _this = possibleConstructorReturn(this, (Gallery.__proto__ || Object.getPrototypeOf(Gallery)).call(this));
 
-    _this.state = {
-      containerWidth: 0
-    };
-    _this.handleResize = _this.handleResize.bind(_this);
-    _this.handleClick = _this.handleClick.bind(_this);
-    return _this;
-  }
+        _this.state = {
+            containerWidth: 0,
+            lightboxIsOpen: false,
+            currentImage: 0
+        };
 
-  createClass(Gallery, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
-      window.addEventListener('resize', this.handleResize);
+        _this.handleResize = _this.handleResize.bind(_this);
+        _this.handleClick = _this.handleClick.bind(_this);
+        _this.openLightbox = _this.openLightbox.bind(_this);
+        _this.closeLightbox = _this.closeLightbox.bind(_this);
+        _this.gotoNext = _this.gotoNext.bind(_this);
+        _this.gotoPrevious = _this.gotoPrevious.bind(_this);
+        return _this;
     }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      if (this._gallery.clientWidth !== this.state.containerWidth) {
-        this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
-      }
-    }
-  }, {
-    key: 'shouldComponentUpdate',
-    value: function shouldComponentUpdate() {
-      return true;
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      window.removeEventListener('resize', this.handleResize, false);
-    }
-  }, {
-    key: 'handleResize',
-    value: function handleResize(e) {
-      this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
-    }
-  }, {
-    key: 'handleClick',
-    value: function handleClick(event, _ref) {
-      var index = _ref.index;
-      var _props = this.props,
-          photos = _props.photos,
-          onClick = _props.onClick;
 
-      onClick(event, {
-        index: index,
-        photo: photos[index],
-        previous: photos[index - 1] || null,
-        next: photos[index + 1] || null
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
+    createClass(Gallery, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+            window.addEventListener('resize', this.handleResize);
+        }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            if (this._gallery.clientWidth !== this.state.containerWidth) {
+                this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+            }
+        }
+    }, {
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate() {
+            return true;
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            window.removeEventListener('resize', this.handleResize, false);
+        }
+    }, {
+        key: 'handleResize',
+        value: function handleResize(e) {
+            this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+        }
+    }, {
+        key: 'handleClick',
+        value: function handleClick(event, _ref) {
+            var index = _ref.index;
+            var _props = this.props,
+                photos = _props.photos,
+                onClick = _props.onClick;
 
-      var _props$ImageComponent = this.props.ImageComponent,
-          ImageComponent = _props$ImageComponent === undefined ? Photo : _props$ImageComponent;
-      // subtract 1 pixel because the browser may round up a pixel
-
-      var width = this.state.containerWidth - 1;
-      var _props2 = this.props,
-          photos = _props2.photos,
-          columns = _props2.columns,
-          margin = _props2.margin,
-          onClick = _props2.onClick;
-
-      var thumbs = computeSizes({ width: width, columns: columns, margin: margin, photos: photos });
-      return React__default.createElement(
-        'div',
-        { className: 'react-photo-gallery--gallery' },
-        React__default.createElement(
-          'div',
-          { ref: function ref(c) {
-              return _this2._gallery = c;
-            } },
-          thumbs.map(function (photo, index) {
-            return React__default.createElement(ImageComponent, {
-              key: photo.key || photo.src,
-              margin: margin,
-              index: index,
-              photo: photo,
-              onClick: onClick ? _this2.handleClick : null
+            onClick(event, {
+                index: index,
+                photo: photos[index],
+                previous: photos[index - 1] || null,
+                next: photos[index + 1] || null
             });
-          })
-        ),
-        React__default.createElement('div', { style: { content: '', display: 'table', clear: 'both' } })
-      );
-    }
-  }]);
-  return Gallery;
+        }
+    }, {
+        key: 'openLightbox',
+        value: function openLightbox(event, obj) {
+            this.setState({
+                currentImage: obj.index,
+                lightboxIsOpen: true
+            });
+        }
+    }, {
+        key: 'closeLightbox',
+        value: function closeLightbox() {
+            this.setState({
+                currentImage: 0,
+                lightboxIsOpen: false
+            });
+        }
+    }, {
+        key: 'gotoPrevious',
+        value: function gotoPrevious() {
+            this.setState({
+                currentImage: this.state.currentImage - 1
+            });
+        }
+    }, {
+        key: 'gotoNext',
+        value: function gotoNext() {
+            this.setState({
+                currentImage: this.state.currentImage + 1
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var _props$ImageComponent = this.props.ImageComponent,
+                ImageComponent = _props$ImageComponent === undefined ? Photo : _props$ImageComponent;
+            // subtract 1 pixel because the browser may round up a pixel
+
+            var width = this.state.containerWidth - 1;
+            var _props2 = this.props,
+                photos = _props2.photos,
+                columns = _props2.columns,
+                margin = _props2.margin;
+
+            var thumbs = computeSizes({ width: width, columns: columns, margin: margin, photos: photos });
+            return React__default.createElement(
+                'div',
+                { className: 'react-photo-gallery--gallery' },
+                React__default.createElement(
+                    'div',
+                    { ref: function ref(c) {
+                            return _this2._gallery = c;
+                        } },
+                    thumbs.map(function (photo, index) {
+                        return React__default.createElement(ImageComponent, {
+                            key: photo.key || photo.src,
+                            margin: margin,
+                            index: index,
+                            photo: photo,
+                            onClick: _this2.openLightbox,
+                            selectClick: _this2.handleClick
+                        });
+                    })
+                ),
+                React__default.createElement(Lightbox, { images: photos,
+                    onClose: this.closeLightbox,
+                    isOpen: this.state.lightboxIsOpen,
+                    onClickPrev: this.gotoPrevious,
+                    onClickNext: this.gotoNext,
+                    currentImage: this.state.currentImage
+                }),
+                React__default.createElement('div', { style: { content: '', display: 'table', clear: 'both' } })
+            );
+        }
+    }]);
+    return Gallery;
 }(React__default.Component);
 
-Gallery$1.propTypes = {
-  photos: PropTypes.arrayOf(photoPropType).isRequired,
-  onClick: PropTypes.func,
-  columns: PropTypes.number,
-  margin: PropTypes.number,
-  ImageComponent: PropTypes.func
+Gallery.propTypes = {
+    photos: PropTypes.arrayOf(photoPropType).isRequired,
+    onClick: PropTypes.func,
+    columns: PropTypes.number,
+    margin: PropTypes.number,
+    ImageComponent: PropTypes.func
 };
 
-Gallery$1.defaultProps = {
-  columns: 3,
-  margin: 2
+Gallery.defaultProps = {
+    columns: 3,
+    margin: 2
 };
 
-return Gallery$1;
-
-})));
+module.exports = Gallery;

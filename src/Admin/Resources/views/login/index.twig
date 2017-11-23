@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900'>
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Montserrat:400,700'>
+    <link href="{{ asset('/css/bootstrap.min.css') }}" rel="stylesheet" media="all" />
+    <link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet" media="all" />
+    <link rel="stylesheet" href="{{ asset('css/login/style.css')}}">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="info">
+        &nbsp;
+    </div>
+</div>
+<div class="form">
+    <div class="thumbnail"><img src="{{ asset('images/logo-mobly.svg') }}"/></div>
+    <form class="login-form" method="POST" action="{{ path('admin_login_check') }}">
+
+        {% if error|length > 0 %}
+            <div class="alert alert-danger" role="alert">
+                Usuário inválido
+            </div>
+        {% endif %}
+
+        <input id="username" name="_username" type="text" placeholder="usuário" required autofocus />
+        <input id="password" name="_password" type="password" placeholder="senha" required/>
+
+        <input type="submit" value="Login">
+    </form>
+</div>
+
+</body>
+</html>

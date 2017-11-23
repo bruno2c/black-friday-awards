@@ -1,0 +1,21 @@
+{
+    "name": "bruno2c/black-friday-awards",
+    "require": {
+        "silex/silex": "~2.0",
+        "twig/twig": "^2.4",
+        "doctrine/dbal": "~2.2",
+        "doctrine/migrations": "^1.5",
+        "symfony/asset": "^3.3",
+        "symfony/twig-bridge": "^3.3",
+        "symfony/finder": "^3.3",
+        "symfony/security": "^3.3"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Admin\\" : "src/Admin",
+            "Contest\\" : "src/Contest",
+            "Migrations\\" : "app/Migrations",
+            "Models\\" : "src/Models"
+        }
+    }
+}

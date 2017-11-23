@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Gallery from 'react-photo-gallery';
 import SelectedImage from './SelectedImage';
@@ -6,10 +5,15 @@ import SelectedImage from './SelectedImage';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentSelect from 'material-ui/svg-icons/content/send';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import Avatar from 'material-ui/Avatar';
+import UserIcon from 'material-ui/svg-icons/action/face'
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import InputMask from 'react-input-mask'
+import fetch from 'isomorphic-fetch'
+import {
+    white,
+} from 'material-ui/styles/colors';
 
 function debounce(func, wait, immediate) {
     let timeout;
@@ -29,6 +33,23 @@ function debounce(func, wait, immediate) {
 
 };
 
+function authenticate() {
+    return async function () {
+        try {
+            const response = await fetch(`http://bfawards.local/contest/${this.state.contestId}/participant/${this.state.loginCpf}`, {
+                credentials: 'same-origin'
+            });
+            const json = await response.json();
+            this.setState({isLogged: true});
+            this.setState({remainingVotes: json.remaining_votes});
+            this.setState({name: json.participant.name});
+        } catch (e) {
+            console.log('Cpf não encontrado', e)
+        }
+    }
+}
+
+
 class AwardGallery extends React.Component {
     constructor(props) {
         super(props);
@@ -39,7 +60,13 @@ class AwardGallery extends React.Component {
             totalPages: 3,
             loadedAll: false,
             openDialog: false,
-            loginCpf: false
+            loginCpf: false,
+            name: '',
+            error: '',
+            contestId: 1,
+            isLogged: false,
+            remainingVotes: 0,
+            openDialogConfirm: false
         };
         this.selectPhoto = this.selectPhoto.bind(this);
         this.toggleSelect = this.toggleSelect.bind(this)
@@ -47,11 +74,15 @@ class AwardGallery extends React.Component {
         this.loadMorePhotos = this.loadMorePhotos.bind(this);
         this.loadMorePhotos = this.loadMorePhotos.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.authenticate = authenticate();
         this.loadMorePhotos = debounce(this.loadMorePhotos, 200);
+
     }
 
+
+
     selectPhoto(event, obj) {
-        if (this.state.loginCpf == '') {
+        if (this.state.loginCpf == '' && this.state.isLogged == false) {
             this.handleOpen();
             return;
         }
@@ -62,10 +93,12 @@ class AwardGallery extends React.Component {
                 count++
             }
         });
-        if (count > 5 && photos[obj.index].selected != true) {
-            alert('Só é possível selecionar 5 fotos');
+        console.log(this.state.remainingVotes)
+        if (count > this.state.remainingVotes && photos[obj.index].selected != true) {
+            alert(`Só é possível votar em ${this.state.remainingVotes} fotos`);
             return false;
         }
+        console.log(photos[obj.index]);
         photos[obj.index].selected = !photos[obj.index].selected;
         this.setState({photos: photos});
     }
@@ -104,17 +137,41 @@ class AwardGallery extends React.Component {
     };
 
     handleLogin= () => {
-        // this.autenticate(this.state.loginCpf);
+        if (this.state.loginCpf == false) {
+            this.setState({error: 'O campo CPF é obrigatório'});
+            return;
+        }
+        this.authenticate();
         this.setState({openDialog: false});
     };
 
+    handleConfirm = () => {
+        // if (this.state.loginCpf == false) {
+        //     this.setState({error: 'O campo CPF é obrigatório'});
+        //     return;
+        // }
+        // this.authenticate();
+        this.setState({openDialogConfirm: false});
+    };
+
     handleClose = () => {
+        this.setState({error: ''});
         this.setState({openDialog: false});
+    };
+
+
+    handleCloseConfirm = () => {
+        this.setState({error: ''});
+        this.setState({openDialogConfirm: false});
     };
 
     handleChange(event) {
         this.setState({loginCpf: event.target.value});
-        console.log(this.state.loginCpf);
+        this.setState({error: ''});
+    };
+
+    handleOpenConfirm(event) {
+        this.setState({openDialogConfirm: true});
     };
 
     render() {
@@ -137,9 +194,38 @@ class AwardGallery extends React.Component {
             />
         ];
 
+        const actionsConfirm = [
+            <FlatButton
+                label="Ok"
+                primary={true}
+                onClick={this.handleConfirm}
+            />,
+            <FlatButton
+                label="Cancelar"
+                secondary={true}
+                onClick={this.handleCloseConfirm}
+            />
+        ];
+
         return (
             <MuiThemeProvider>
+                <div>
+                {this.state.isLogged == true  ?
+                    <div style={{float: 'right', position: 'absolute', top: 54}}>
+                    <Avatar
+                    icon={<UserIcon/>}
+                    color={'#6022a8'}
+                    backgroundColor={white}
+                    size={40}
+                    style={{float: 'left'}}
+                    />
+                    <h2 style={{float: 'right', lineHeight: '50%'}}>{this.state.name}</h2>
+                    </div>
+                : null
+                }
             <div style={{position: 'relative'}}>
+
+
                 <div style={{overflowY: 'auto'}}>
                     <Gallery photos={this.state.photos} columns={this.props.columns} onClick={this.selectPhoto}
                              ImageComponent={SelectedImage}/>
@@ -147,7 +233,7 @@ class AwardGallery extends React.Component {
                     {!this.state.loadedAll && <div className="loading-msg" id="msg-loading-more">Loading</div>}
                 </div>
                 {count > 0 ?
-                    <FloatingActionButton style={{  position: 'fixed', top: '90%',  left:'95.5%' }} onClick={(e) => selectClick(e, {index, photo})}>
+                    <FloatingActionButton style={{  position: 'fixed', top: '90%',  left:'95.5%' }} onClick={(e) => this.handleOpenConfirm()}>
                     <ContentSelect/>
                     </FloatingActionButton>
                     : null}
@@ -161,11 +247,22 @@ class AwardGallery extends React.Component {
                     <TextField
                         floatingLabelText="CPF"
                         onChange={this.handleChange}
+                        errorText={this.state.error}
                     >
-                        <InputMask mask="999.999.999-99" maskChar=" " />
+                        {/*<InputMask mask="999.999.999-99" maskChar=" " />*/}
                     </TextField>
                 </Dialog>
+
+                <Dialog
+                    title="Confirmar voto?"
+                    actions={actionsConfirm}
+                    modal={false}
+                    open={this.state.openDialogConfirm}
+                    onRequestClose={this.handleCloseConfirm}
+                >
+                </Dialog>
             </div>
+                </div>
             </MuiThemeProvider>
         );
     }
