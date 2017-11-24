@@ -238,6 +238,10 @@ class AwardGallery extends React.Component {
         this.setState({openDialog: false});
     };
 
+    handleCloseModal = () => {
+        this.setState({altError: false});
+    };
+
 
     handleCloseConfirm = () => {
         this.setState({error: ''});
@@ -274,6 +278,14 @@ class AwardGallery extends React.Component {
             />
         ];
 
+        const actionCancel = [
+            <FlatButton
+                label="Fechar"
+                secondary={true}
+                onClick={this.handleCloseModal}
+            />
+        ];
+
         const actionsConfirm = [
             <FlatButton
                 label="Ok"
@@ -291,11 +303,13 @@ class AwardGallery extends React.Component {
             <MuiThemeProvider>
                 <div>
 
-                {this.state.altError &&
-                    <div style={{float: 'right', position: 'absolute', top: 54}}>
-                        <h2>{ this.state.altError }</h2>
-                    </div>
-                }
+                <Dialog
+                    actions={actionCancel}
+                    modal={false}
+                    open={this.state.altError}
+                >
+                    <div>{ this.state.altError }</div>
+                </Dialog>
 
                 {this.state.isLogged == true  ?
                     <div style={{float: 'right', position: 'absolute', top: 54}}>
