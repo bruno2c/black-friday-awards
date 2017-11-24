@@ -5,7 +5,6 @@
     <meta name="description" content="A responsive photo gallery React component"/>
     <meta name="keywords" content="react, responsive, image, photos, photo, gallery, photo gallery, image gallery"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="example.css"/>
 </head>
 <body>
 <div class="container">
@@ -27,6 +26,11 @@
     </header>
     <div id="app"></div>
 </div>
+<script type="application/javascript">
+    var contestId = "{{ contestId }}";
+    var baseUrl = "{{ baseUrl }}";
+
+</script>
 <script src="{{ asset('/js/jquery.min.js') }}"></script>
 <script src="{{ asset("js/gallery/dist/common.js") }}"></script>
 <script src="{{ asset("js/gallery/dist/app.js") }}"></script>

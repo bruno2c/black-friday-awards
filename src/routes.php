@@ -1,5 +1,17 @@
 <?php
 
+$app->get('/images/{file}', function ($file) use ($app) {
+    if (!file_exists(__DIR__.'/images/'.$file)) {
+        return $app->abort(404, 'The image was not found.');
+    }
+
+    $stream = function () use ($file) {
+        readfile($file);
+    };
+
+    return $app->stream($stream, 200, array('Content-Type' => 'image/png'));
+});
+
 $app->mount('/admin', function ($admin) {
     $admin->get('/', 'Admin\Controllers\DashboardController::index')->bind('admin_home');
     $admin->get('/contests', 'Admin\Controllers\ContestController::index')->bind('admin_contests');
@@ -12,6 +24,7 @@ $app->mount('/admin', function ($admin) {
 
 $app->mount('/', function ($contest) {
     $contest->get('/', 'Contest\Controllers\IndexController::index');
+    $contest->get('/vote/contest/{contestId}', 'Contest\Controllers\IndexController::index');
     $contest->match('/contest/running', 'Contest\Controllers\ContestController::running');
     $contest->match('/contest/vote', 'Contest\Controllers\ParticipantController::vote');
     $contest->match('/contest/{contestId}', 'Contest\Controllers\ContestController::index');
