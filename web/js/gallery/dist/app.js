@@ -79972,7 +79972,7 @@ var Winners = function (_React$Component) {
                     { style: { top: 200, position: 'absolute', width: '100%' } },
                     _react2.default.createElement(
                         'h1',
-                        null,
+                        { style: { marginLeft: "47%" } },
                         this.state.photos.length,
                         '\u2070 Lugar'
                     ),

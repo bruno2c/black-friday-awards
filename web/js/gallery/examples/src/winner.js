@@ -50,7 +50,7 @@ class Winners extends React.Component {
                             {/*return <img src={row.url}></img>*/}
                             {/*}*/}
                         {/*)}*/}
-                        <h1>{this.state.photos.length}&#8304; Lugar</h1>
+                        <h1 style={{marginLeft: "47%"}}>{this.state.photos.length}&#8304; Lugar</h1>
                         {this.state.next ?
                             <FloatingActionButton style={{position: 'absolute', left: '49%', top: 70}}
                                                   onClick={(e) => this.handleNext()}>
