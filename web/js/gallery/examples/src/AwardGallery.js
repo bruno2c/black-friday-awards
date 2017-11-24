@@ -115,7 +115,6 @@ class AwardGallery extends React.Component {
         this.toggleSelect = this.toggleSelect.bind(this)
         this.handleScroll = this.handleScroll.bind(this);
         this.loadMorePhotos = this.loadMorePhotos.bind(this);
-        this.loadMorePhotos = this.loadMorePhotos.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.authenticate = authenticate();
         this.confirmVote = confirmVote();
@@ -182,7 +181,7 @@ class AwardGallery extends React.Component {
             return;
         }
         this.setState({
-            photos: this.state.photos.concat(this.props.photos.slice(this.state.photos.length, this.state.photos.length + 6)),
+            photos: this.state.photos.concat(this.props.photos.slice(this.state.photos.length, this.state.photos.length + 9)),
             pageNum: this.state.pageNum + 1
         });
     }
