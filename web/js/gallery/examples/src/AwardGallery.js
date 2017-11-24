@@ -43,7 +43,7 @@ function authenticate() {
             });
             const json = await response.json();
 
-            if (json.code != 200) {
+            if (json.code != '200') {
                 this.setState({altError: json.message});
                 return;
             }
