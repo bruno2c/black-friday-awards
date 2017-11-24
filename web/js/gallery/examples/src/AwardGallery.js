@@ -49,6 +49,11 @@ function authenticate() {
 
             let photos = this.state.photos;
 
+            if (json.code != 200) {
+                alert('CPF não encontrado');
+                return;
+            }
+
             json.votes.filter(votes => {
                 this.state.photos.filter((key, index) => {
                   if (key.id == votes.image_id) {
