@@ -291,7 +291,7 @@ class AwardGallery extends React.Component {
             <MuiThemeProvider>
                 <div>
 
-                {this.state.altError.length > 0 &&
+                {this.state.altError &&
                     <div>{ this.state.altError }</div>
                 }
 
