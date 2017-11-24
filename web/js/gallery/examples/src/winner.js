@@ -51,15 +51,20 @@ class Winners extends React.Component {
                             {/*}*/}
                         {/*)}*/}
                         <h1 style={{marginLeft: "47%"}}>{this.state.photos.length}&#8304; Lugar</h1>
-                        {this.state.next ?
-                            <FloatingActionButton style={{position: 'absolute', left: '49%', top: 70}}
-                                                  onClick={(e) => this.handleNext()}>
-                                <ArrowNext/>
-                            </FloatingActionButton> :
-                            <FloatingActionButton style={{position: 'absolute', left: '49%', top: 70}}
-                                                  onClick={(e) => this.handleShow()}>
-                                <ContentAdd/>
-                            </FloatingActionButton>
+
+                        {this.state.photos.length > 0 &&
+                            <div>
+                            {this.state.next && this.state.photos.length > 1 ?
+                                <FloatingActionButton style={{position: 'absolute', left: '49%', top: 70}}
+                                                      onClick={(e) => this.handleNext()}>
+                                    <ArrowNext/>
+                                </FloatingActionButton> :
+                                <FloatingActionButton style={{position: 'absolute', left: '49%', top: 70}}
+                                                      onClick={(e) => this.handleShow()}>
+                                    <ContentAdd/>
+                                </FloatingActionButton>
+                            }
+                            </div>
                         }
                         <div style={{position: 'absolute', top: 150, marginLeft: '27%'}}>
                         <ReactTransitions

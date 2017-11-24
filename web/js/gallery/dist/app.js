@@ -79976,20 +79976,24 @@ var Winners = function (_React$Component) {
                         this.state.photos.length,
                         '\u2070 Lugar'
                     ),
-                    this.state.next ? _react2.default.createElement(
-                        _FloatingActionButton2.default,
-                        { style: { position: 'absolute', left: '49%', top: 70 },
-                            onClick: function onClick(e) {
-                                return _this2.handleNext();
-                            } },
-                        _react2.default.createElement(_trendingFlat2.default, null)
-                    ) : _react2.default.createElement(
-                        _FloatingActionButton2.default,
-                        { style: { position: 'absolute', left: '49%', top: 70 },
-                            onClick: function onClick(e) {
-                                return _this2.handleShow();
-                            } },
-                        _react2.default.createElement(_add2.default, null)
+                    this.state.photos.length > 0 && _react2.default.createElement(
+                        'div',
+                        null,
+                        this.state.next && this.state.photos.length > 1 ? _react2.default.createElement(
+                            _FloatingActionButton2.default,
+                            { style: { position: 'absolute', left: '49%', top: 70 },
+                                onClick: function onClick(e) {
+                                    return _this2.handleNext();
+                                } },
+                            _react2.default.createElement(_trendingFlat2.default, null)
+                        ) : _react2.default.createElement(
+                            _FloatingActionButton2.default,
+                            { style: { position: 'absolute', left: '49%', top: 70 },
+                                onClick: function onClick(e) {
+                                    return _this2.handleShow();
+                                } },
+                            _react2.default.createElement(_add2.default, null)
+                        )
                     ),
                     _react2.default.createElement(
                         'div',
