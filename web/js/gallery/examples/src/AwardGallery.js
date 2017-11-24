@@ -93,7 +93,7 @@ class AwardGallery extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            photos: this.props.photos.slice(0, 12),
+            photos: this.props.photos.slice(0, 30),
             selectAll: false,
             pageNum: 1,
             totalPages: 3,
@@ -181,7 +181,7 @@ class AwardGallery extends React.Component {
             return;
         }
         this.setState({
-            photos: this.state.photos.concat(this.props.photos.slice(this.state.photos.length, this.state.photos.length + 12)),
+            photos: this.state.photos.concat(this.props.photos.slice(this.state.photos.length, this.state.photos.length + 30)),
             pageNum: this.state.pageNum + 1
         });
     }
@@ -330,7 +330,7 @@ class AwardGallery extends React.Component {
                         onChange={this.handleChange}
                         errorText={this.state.error}
                     >
-                        {/*<InputMask mask="999.999.999-99" maskChar=" " />*/}
+                        {/*<InputMask mask="999.999.9x'9-99" maskChar=" " />*/}
                     </TextField>
                 </Dialog>
 
