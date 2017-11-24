@@ -42,17 +42,18 @@ function authenticate() {
                 credentials: 'same-origin'
             });
             const json = await response.json();
+
+            if (json.code != 200) {
+                this.setState({altError: json.message});
+                return;
+            }
+
             this.setState({isLogged: true});
             this.setState({remainingVotes: json.remaining_votes});
             this.setState({name: json.participant.name});
             this.setState({getVotes: json.votes});
 
             let photos = this.state.photos;
-
-            if (json.code != 200) {
-                alert('CPF não encontrado');
-                return;
-            }
 
             json.votes.filter(votes => {
                 this.state.photos.filter((key, index) => {
@@ -286,6 +287,11 @@ class AwardGallery extends React.Component {
         return (
             <MuiThemeProvider>
                 <div>
+
+                {this.state.isLogged == false && this.state.loginCpf != '' &&
+                    <div>{{ this.state.altError }}</div>
+                }
+
                 {this.state.isLogged == true  ?
                     <div style={{float: 'right', position: 'absolute', top: 54}}>
                         <Avatar
