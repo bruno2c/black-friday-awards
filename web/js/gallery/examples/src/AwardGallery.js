@@ -38,6 +38,8 @@ function debounce(func, wait, immediate) {
 function authenticate() {
     return async function () {
         try {
+            this.setState({altError: false});
+
             const response = await fetch(baseUrl + `/contest/` + `${this.state.contestId}/participant/${this.state.loginCpf}`, {
                 credentials: 'same-origin'
             });
@@ -45,6 +47,7 @@ function authenticate() {
 
             if (json.code != '200') {
                 this.setState({altError: json.message});
+                this.setState({loginCpf: ''});
                 return;
             }
 
