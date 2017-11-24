@@ -8,7 +8,7 @@ import AwardGallery from './AwardGallery';
 function getImagesAndContest() {
     return async function () {
         try {
-            const response = await fetch(`http://bfawards.local/contest/running`, {
+            const response = await fetch(`http://bfawards.local/contest/` + contestId, {
                 credentials: 'same-origin'
             });
             const json = await response.json();

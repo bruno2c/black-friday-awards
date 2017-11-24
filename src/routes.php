@@ -12,6 +12,7 @@ $app->mount('/admin', function ($admin) {
 
 $app->mount('/', function ($contest) {
     $contest->get('/', 'Contest\Controllers\IndexController::index');
+    $contest->get('/vote/contest/{contestId}', 'Contest\Controllers\IndexController::index');
     $contest->match('/contest/running', 'Contest\Controllers\ContestController::running');
     $contest->match('/contest/vote', 'Contest\Controllers\ParticipantController::vote');
     $contest->match('/contest/{contestId}', 'Contest\Controllers\ContestController::index');

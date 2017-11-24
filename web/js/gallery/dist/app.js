@@ -15518,7 +15518,7 @@ function getImagesAndContest() {
                     case 0:
                         _context.prev = 0;
                         _context.next = 3;
-                        return (0, _isomorphicFetch2.default)('http://bfawards.local/contest/running', {
+                        return (0, _isomorphicFetch2.default)('http://bfawards.local/contest/' + contestId, {
                             credentials: 'same-origin'
                         });
 
