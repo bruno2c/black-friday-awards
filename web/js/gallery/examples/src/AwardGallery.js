@@ -308,7 +308,7 @@ class AwardGallery extends React.Component {
                     modal={false}
                     open={this.state.altError}
                 >
-                    <div>{ this.state.altError }</div>
+                    <div style={{ color: 'red' }}>{ this.state.altError }</div>
                 </Dialog>
 
                 {this.state.isLogged == true  ?
