@@ -66,13 +66,13 @@ class ContestController
         return new JsonResponse($response);
     }
 
-    public function winners(Application $app)
+    public function winners($contestId = null, Application $app)
     {
         $response = [];
 
         try {
             $contestModel = new Contest($app);
-            $ranking = $contestModel->getWinners(1);
+            $ranking = $contestModel->getWinners($contestId);
 
             $response = [
                 'code' => Response::HTTP_OK,
