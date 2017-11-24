@@ -284,15 +284,15 @@ class AwardGallery extends React.Component {
                 <div>
                 {this.state.isLogged == true  ?
                     <div style={{float: 'right', position: 'absolute', top: 54}}>
-                    <Avatar
-                    icon={<UserIcon/>}
-                    color={'#6022a8'}
-                    backgroundColor={white}
-                    size={40}
-                    style={{float: 'left'}}
-                    />
-                    <h2 style={{float: 'right', lineHeight: '50%'}}>{this.state.name}</h2>
-                    </div>
+                        <Avatar
+                        icon={<UserIcon/>}
+                        color={'#6022a8'}
+                        backgroundColor={white}
+                        size={40}
+                        style={{float: 'left', lineHeight: '50%'}}
+                        />
+                        <h2 style={{float: 'right', lineHeight: '5%'}}>{this.state.name}</h2>
+                        </div>
                 : null
                 }
                     {/*<div id="alertDiv"  disabled={true} style={{float: 'left', position: 'absolute', top: 29, right: 100, display: 'none'}}>*/}
