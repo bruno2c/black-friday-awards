@@ -291,7 +291,7 @@ class AwardGallery extends React.Component {
             <MuiThemeProvider>
                 <div>
 
-                {this.state.isLogged == false && this.state.loginCpf != '' &&
+                {this.state.altError.length > 0 &&
                     <div>{ this.state.altError }</div>
                 }
 
