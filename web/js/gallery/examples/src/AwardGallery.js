@@ -289,7 +289,7 @@ class AwardGallery extends React.Component {
                 <div>
 
                 {this.state.isLogged == false && this.state.loginCpf != '' &&
-                    <div>{{ this.state.altError }}</div>
+                    <div>{ this.state.altError }</div>
                 }
 
                 {this.state.isLogged == true  ?
