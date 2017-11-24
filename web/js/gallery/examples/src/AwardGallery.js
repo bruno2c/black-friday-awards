@@ -292,7 +292,9 @@ class AwardGallery extends React.Component {
                 <div>
 
                 {this.state.altError &&
-                    <div>{ this.state.altError }</div>
+                    <div style={{float: 'right', position: 'absolute', top: 54}}>
+                        <h2>{ this.state.altError }</h2>
+                    </div>
                 }
 
                 {this.state.isLogged == true  ?
