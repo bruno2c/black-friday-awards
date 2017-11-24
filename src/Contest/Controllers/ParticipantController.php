@@ -27,7 +27,7 @@ class ParticipantController
             }
 
             $participantVoteModel = new ParticipantVote($app);
-            $votes = $participantVoteModel->getParticipantVotes($participant['id']);
+            $votes = $participantVoteModel->getParticipantVotes($participant['id'], $contestId);
             $totalVotes = count($votes);
 
             $contestModel = new Contest($app);
@@ -78,7 +78,7 @@ class ParticipantController
             }
 
             $participantVoteModel = new ParticipantVote($app);
-            $votes = $participantVoteModel->getParticipantVotes($participant['id']);
+            $votes = $participantVoteModel->getParticipantVotes($participant['id'], $data['contest_id']);
             $totalVotes = count($votes);
 
             $contestModel = new Contest($app);

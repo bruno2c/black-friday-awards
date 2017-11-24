@@ -6,18 +6,18 @@ class ParticipantVote extends AbstractModel
 {
     public $table = 'participant_vote';
 
-    public function getParticipantVotes($participantId)
-    {
-        $sql = "SELECT pv.* FROM participant_vote pv WHERE pv.participant_id = ?";
-        return $this->db->fetchAll($sql, [(int) $participantId]);
-    }
-
-    public function checkParticipantVoteForImage($participantId, $imageId)
+    public function getParticipantVotes($participantId, $contestId)
     {
         $sql = "SELECT pv.* FROM participant_vote pv
                 JOIN image i ON i.id = pv.image_id
                 JOIN contest c ON c.id = image.contest_id
-                WHERE pv.participant_id = ? AND pv.image_id = ?";
+                WHERE pv.participant_id = ? AND c.id = ?";
+        return $this->db->fetchAll($sql, [(int) $participantId, (int) $contestId]);
+    }
+
+    public function checkParticipantVoteForImage($participantId, $imageId)
+    {
+        $sql = "SELECT pv.* FROM participant_vote pv WHERE pv.participant_id = ? AND pv.image_id = ?";
         $vote = $this->db->fetchAssoc($sql, [(int) $participantId, (int) $imageId]);
 
         return isset($vote['id']);
