@@ -4,7 +4,6 @@ import Measure from 'react-measure';
 import fetch from 'isomorphic-fetch'
 import AwardGallery from './AwardGallery';
 
-
 function getImagesAndContest() {
     return async function () {
         try {
@@ -23,7 +22,7 @@ function getImagesAndContest() {
 class App extends React.Component {
     constructor() {
         super();
-        this.state = {width: -1};
+        this.state = {width: -1, winners: ''};
         this.getImagesAndContest = getImagesAndContest();
     }
 

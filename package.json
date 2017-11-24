@@ -16,8 +16,11 @@
     "isomorphic-fetch": "^2.2.1",
     "material-ui": "^0.19.4",
     "prop-types": "~15.6.0",
+    "react-addons-css-transition-group": "^15.6.2",
     "react-addons-update": "^15.6.2",
-    "react-input-mask": "^1.0.7"
+    "react-animations": "^1.0.0",
+    "react-input-mask": "^1.0.7",
+    "react-transitions": "^1.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
