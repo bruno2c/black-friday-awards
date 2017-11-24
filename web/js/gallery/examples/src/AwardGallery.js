@@ -38,7 +38,7 @@ function debounce(func, wait, immediate) {
 function authenticate() {
     return async function () {
         try {
-            const response = await fetch(`http://bfawards.local/contest/${this.state.contestId}/participant/${this.state.loginCpf}`, {
+            const response = await fetch(baseUrl + `/contest/` + `${this.state.contestId}/participant/${this.state.loginCpf}`, {
                 credentials: 'same-origin'
             });
             const json = await response.json();
@@ -72,7 +72,7 @@ function confirmVote() {
         data.append('images', this.state.votes);
         data.append('contest_id', this.state.contestId);
         data.append('document', this.state.loginCpf);
-        const url = 'http://bfawards.local/contest/vote';
+        const url = baseUrl + '/contest/vote';
 
         try {
             const response = await fetch(url, {
