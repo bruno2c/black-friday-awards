@@ -93,7 +93,7 @@ class AwardGallery extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            photos: this.props.photos.slice(0, 9),
+            photos: this.props.photos.slice(0, 12),
             selectAll: false,
             pageNum: 1,
             totalPages: 3,
@@ -181,7 +181,7 @@ class AwardGallery extends React.Component {
             return;
         }
         this.setState({
-            photos: this.state.photos.concat(this.props.photos.slice(this.state.photos.length, this.state.photos.length + 9)),
+            photos: this.state.photos.concat(this.props.photos.slice(this.state.photos.length, this.state.photos.length + 12)),
             pageNum: this.state.pageNum + 1
         });
     }
