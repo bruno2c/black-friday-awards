@@ -10,7 +10,7 @@ class ParticipantVote extends AbstractModel
     {
         $sql = "SELECT pv.* FROM participant_vote pv
                 JOIN image i ON i.id = pv.image_id
-                JOIN contest c ON c.id = image.contest_id
+                JOIN contest c ON c.id = i.contest_id
                 WHERE pv.participant_id = ? AND c.id = ?";
         return $this->db->fetchAll($sql, [(int) $participantId, (int) $contestId]);
     }
