@@ -111,7 +111,7 @@ class AwardGallery extends React.Component {
             loginCpf: false,
             name: '',
             error: '',
-            contestId: 1,
+            contestId: contestId,
             isLogged: false,
             remainingVotes: 0,
             openDialogConfirm: false,
