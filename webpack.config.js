@@ -6,6 +6,7 @@ module.exports = {
   entry: [
     'babel-polyfill',
     './app.js',
+    './appWinners.js',
   ],
   output: {
     filename: 'app.js',

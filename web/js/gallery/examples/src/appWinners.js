@@ -5,7 +5,7 @@ import Winners from './winner';
 
 function getWinners() {
     return async function () {
-        const url = `http://bfawards.local/contest/${this.state.contestId}/winners`;
+        const url = baseUrl + `/contest/` + contestId + `/winners`;
         try {
             const response = await fetch(url, {
                 credentials: 'same-origin'
@@ -39,4 +39,6 @@ class AppWinners extends React.Component {
     }
 }
 
-ReactDOM.render(<AppWinners/>, document.getElementById('app'));
+if (document.getElementById('app-winners')) {
+    ReactDOM.render(<AppWinners/>, document.getElementById('app-winners'));
+}
