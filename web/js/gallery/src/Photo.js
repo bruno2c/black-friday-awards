@@ -29,8 +29,8 @@ class Photo extends PureComponent {
 
 export const photoPropType = PropTypes.shape({
   src: PropTypes.string.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
+  width: PropTypes.string.isRequired,
+  height: PropTypes.string.isRequired,
   alt: PropTypes.string,
   title: PropTypes.string,
   srcSet: PropTypes.array,

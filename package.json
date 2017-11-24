@@ -16,6 +16,7 @@
     "isomorphic-fetch": "^2.2.1",
     "material-ui": "^0.19.4",
     "prop-types": "~15.6.0",
+    "react-addons-update": "^15.6.2",
     "react-input-mask": "^1.0.7"
   },
   "devDependencies": {

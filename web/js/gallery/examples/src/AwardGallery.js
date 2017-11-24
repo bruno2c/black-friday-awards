@@ -10,10 +10,12 @@ import UserIcon from 'material-ui/svg-icons/action/face'
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
 import fetch from 'isomorphic-fetch'
 import {
     white,
 } from 'material-ui/styles/colors';
+import update from 'react-addons-update';
 
 function debounce(func, wait, immediate) {
     let timeout;
@@ -43,8 +45,45 @@ function authenticate() {
             this.setState({isLogged: true});
             this.setState({remainingVotes: json.remaining_votes});
             this.setState({name: json.participant.name});
+            this.setState({getVotes: json.votes});
+
+            let photos = this.state.photos;
+
+            json.votes.filter(votes => {
+                this.state.photos.filter((key, index) => {
+                  if (key.id == votes.image_id) {
+                      photos[index].disable = true
+                  }
+                });
+            })
+
+            this.setState({photos: photos});
         } catch (e) {
             console.log('Cpf não encontrado', e)
+        }
+    }
+}
+
+
+function confirmVote() {
+    return async function () {
+
+        let data = new FormData();
+        data.append('images', this.state.votes);
+        data.append('contest_id', this.state.contestId);
+        data.append('document', this.state.loginCpf);
+        const url = 'http://bfawards.local/contest/vote';
+
+        try {
+            const response = await fetch(url, {
+                body: data,
+                credentials: 'same-origin',
+                method: 'POST'
+            })
+            const json = await response.json()
+            return  json.code;
+        } catch (e) {
+            console.log(e)
         }
     }
 }
@@ -66,7 +105,11 @@ class AwardGallery extends React.Component {
             contestId: 1,
             isLogged: false,
             remainingVotes: 0,
-            openDialogConfirm: false
+            openDialogConfirm: false,
+            votes: [],
+            responseVote: '',
+            snackOpen: false,
+            getVotes: ''
         };
         this.selectPhoto = this.selectPhoto.bind(this);
         this.toggleSelect = this.toggleSelect.bind(this)
@@ -75,11 +118,10 @@ class AwardGallery extends React.Component {
         this.loadMorePhotos = this.loadMorePhotos.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.authenticate = authenticate();
+        this.confirmVote = confirmVote();
         this.loadMorePhotos = debounce(this.loadMorePhotos, 200);
 
     }
-
-
 
     selectPhoto(event, obj) {
         if (this.state.loginCpf == '' && this.state.isLogged == false) {
@@ -88,18 +130,31 @@ class AwardGallery extends React.Component {
         }
         let photos = this.state.photos;
         let count = 1;
+
         photos.filter(key => {
             if (key.selected == true) {
                 count++
             }
         });
-        console.log(this.state.remainingVotes)
         if (count > this.state.remainingVotes && photos[obj.index].selected != true) {
-            alert(`Só é possível votar em ${this.state.remainingVotes} fotos`);
+            alert(`Você possui ${this.state.remainingVotes} voto(s) restante(s)`);
             return false;
         }
-        console.log(photos[obj.index]);
         photos[obj.index].selected = !photos[obj.index].selected;
+
+        if (photos[obj.index].selected  == true) {
+            var imagesId = this.state.votes.slice()
+
+            imagesId.push(photos[obj.index].id)
+            this.setState({votes: imagesId })
+        } else {
+            let teste = this.state.votes.indexOf(photos[obj.index].id);
+            let arr = this.state.votes.splice(teste, 1);
+            let ts = this.state.votes
+            ts = {$splice: [[teste, 1]]};
+            let i =  update(this.state.votes, ts)
+        }
+
         this.setState({photos: photos});
     }
 
@@ -136,7 +191,7 @@ class AwardGallery extends React.Component {
         this.setState({openDialog: true});
     };
 
-    handleLogin= () => {
+    handleLogin = () => {
         if (this.state.loginCpf == false) {
             this.setState({error: 'O campo CPF é obrigatório'});
             return;
@@ -145,13 +200,29 @@ class AwardGallery extends React.Component {
         this.setState({openDialog: false});
     };
 
+
     handleConfirm = () => {
-        // if (this.state.loginCpf == false) {
-        //     this.setState({error: 'O campo CPF é obrigatório'});
-        //     return;
-        // }
-        // this.authenticate();
+        let imagesId = []
+        let photos = this.state.photos;
+
+        photos.filter(key => {
+            if (key.selected == true) {
+                imagesId.push(key.id)
+            }
+        });
+
+        this.confirmVote();
+
+        setTimeout(function () {
+            window.location.reload();
+        }, 3000);
+        // var yourUl = document.getElementById("alertDiv");
+        // yourUl.style.display = yourUl.style.display === 'none' ? '' : 'none';
+        this.setState({snackOpen: true});
         this.setState({openDialogConfirm: false});
+
+        //
+
     };
 
     handleClose = () => {
@@ -171,6 +242,7 @@ class AwardGallery extends React.Component {
     };
 
     handleOpenConfirm(event) {
+
         this.setState({openDialogConfirm: true});
     };
 
@@ -223,11 +295,21 @@ class AwardGallery extends React.Component {
                     </div>
                 : null
                 }
+                    {/*<div id="alertDiv"  disabled={true} style={{float: 'left', position: 'absolute', top: 29, right: 100, display: 'none'}}>*/}
+                        {/*<div style={{backgroundColor: 'green'}}><h1 style={{color: 'white'}}>Voto realizado com sucesso</h1></div>*/}
+                    {/*</div>*/}
+                    <Snackbar
+                        open={this.state.snackOpen}
+                        message="Voto realizado com sucesso"
+                        autoHideDuration={4000}
+                        style={{color: 'red'}}
+                        onRequestClose={this.handleRequestClose}
+                    />
             <div style={{position: 'relative'}}>
 
 
                 <div style={{overflowY: 'auto'}}>
-                    <Gallery photos={this.state.photos} columns={this.props.columns} onClick={this.selectPhoto}
+                    <Gallery photos={this.state.photos} columns={this.props.columns} onClick={this.selectPhoto} enableSelect={this.state.remainingVotes  < 1 ? false : true}
                              ImageComponent={SelectedImage}/>
 
                     {!this.state.loadedAll && <div className="loading-msg" id="msg-loading-more">Loading</div>}
@@ -254,7 +336,7 @@ class AwardGallery extends React.Component {
                 </Dialog>
 
                 <Dialog
-                    title="Confirmar voto?"
+                    title="Deseja Confirmar ?"
                     actions={actionsConfirm}
                     modal={false}
                     open={this.state.openDialogConfirm}
